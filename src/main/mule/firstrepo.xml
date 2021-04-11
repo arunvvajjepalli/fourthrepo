@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d3154552-75f7-4102-8284-fa0e5cdd9535" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<flow name="firstrepoFlow" doc:id="1c47b4ea-29bb-4adf-aca5-e133b3fdefc8" >
+		<http:listener doc:name="Listener" doc:id="0bad10c8-f9a9-4ed3-980e-fca423b2348b" config-ref="HTTP_Listener_config" path="firstrepo"/>
+		<set-payload value='"hello world"' doc:name="Set Payload" doc:id="ff290fd4-2289-46db-a20d-99b4413e5231" />
+		<ee:transform doc:name="Transform Message" doc:id="f6f5abf7-4d1c-41a3-97f2-df19d45a7ca5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="424ef8a7-a3ba-419d-a9a8-901085e89e22" message="#[payload]"/>
+	</flow>
+</mule>
